@@ -8,7 +8,10 @@ Created on Mon Sep  4 12:39:43 2023
 import streamlit as st
 import sqlite3
 import pandas as pd
+import pandas as pd
 
+# read data from the csv file 'Aus_postcodes_cleaned.csv'
+df_postcodes = pd.read_csv('Aus_postcodes_cleaned.csv')
 
 # Define the style class
 class style():
@@ -36,6 +39,16 @@ container_styles = """
 </style>
 """
 
+def AllInputsFilled(survey_inputs):
+    """
+    Check if all the inputs are filled
+    """
+    for i in survey_inputs:
+        if i == '':
+            return False
+    return True
+
+
 
 # Create or connect to the SQLite database
 conn = sqlite3.connect('survey_responses.db')
@@ -47,6 +60,7 @@ c.execute('''
         response_id INTEGER PRIMARY KEY AUTOINCREMENT,
         q1 TEXT,
         q2 TEXT,
+        q2_1 TEXT,
         q3 TEXT,
         q4 TEXT,
         q5 TEXT,
@@ -150,11 +164,45 @@ st.write('')
 col1, col2 = st.columns([c1,c2])
 with col1:
     st.write('')
+    Q = 'Please enter your postcode'
+    fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
+    st.markdown(fstring1, unsafe_allow_html=True)
+    st.markdown('<p style = "color:' + str(style.h3color) + '; font-size: ' + str(13) + 'px;" >'  + '(for approximate mapping purposes only)'+  '</p>',unsafe_allow_html=True)
+with col2:
+    q2_1 = st.text_input("", key= 'q2_1')
+
+
+    # check if input q2_1 is in the 'postcode' column
+    if int(q2_1) in df_postcodes['postcode'].values:
+        q2_1 = int(q2_1)
+    else:
+        st.error('Please enter a valid postcode')
+        q2_1 = ''
+
+# read data from the csv file 'Aus_postcodes_cleaned.csv'
+df_postcodes = pd.read_csv('Aus_postcodes_cleaned.csv')  
+# collect lat and long for the entered postcode
+if q2_1 == '':
+    lat = -37.814
+    long = 144.96332
+else:
+    lat = df_postcodes[df_postcodes['postcode'] == int(q2_1)]['lat'].values[0]
+    long = df_postcodes[df_postcodes['postcode'] == int(q2_1)]['long'].values[0]
+# display the map in the sidebar
+st.sidebar.map(pd.DataFrame({'lat':[lat], 'lon':[long]}))
+
+st.write('')
+
+
+
+col1, col2 = st.columns([c1,c2])
+with col1:
+    st.write('')
     Q = 'What best descibes your business from the options below?'
     fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
     st.markdown(fstring1, unsafe_allow_html=True)
 with col2:
-    q3 = st.selectbox('', ("Material processessor", "product manufacuter", 'Wholesale distributor', 'frame fabricator', 'warehouse and logistics facilitator', 'construction company', 'design company', 'engineering services'))
+    q3 = st.selectbox('', ("Processesed material producer/supplier", 'Wholesale distributor','Volumetric modular building/units/pods manufacturer', 'Panelised unit manufacturer', 'frame fabricator', 'warehouse and logistics facilitator', 'builder/construction company', 'design studio', 'engineering services'))
 st.write('')
 
 
@@ -300,6 +348,11 @@ Ex = 'Example: 1000 m3 per day, 1000 kgs per week, 1000 m2 per month, 1000 units
 fstring1 = '<p style = "color:' + str(style.h4color) + '; font-size: ' + str(style.h4size) + 'px;" > <b>' + str(Ex) + '</b> </p>'
 st.markdown(fstring1, unsafe_allow_html=True)
 
+Ex = 'Enter combined capacity of all your facilities and SKUs. If SKUs are of different nature, choose your main SKU.'
+fstring2 = '<p style = "color:' + str(style.h4color) + '; font-size: ' + str(style.h4size) + 'px;" > <b>' + str(Ex) + '</b> </p>'
+st.markdown(fstring2, unsafe_allow_html=True)
+
+
 
 st.write('')
 
@@ -367,11 +420,28 @@ fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(sty
 st.markdown(fstring1, unsafe_allow_html=True)
 q15 = st.text_area('')
 st.write(''); st.write(''); st.write(''); st.write('')
+
+
+col1, col2 = st.columns([1,10])
+with col2:
+    Q = 'Indicate if you would like to be a part of PrefabAUS industry partner ecosystem and Supply Chain Directory. By checking this box, you \
+    indicate your interest in being contacted by PrefabAUS to discuss your business and its capabilities in more detail. You will also be \
+        invited to join the PrefabAUS Supply Chain Directory, which will be launched in 2024. The directory will be a searchable database of \
+            Australian prefabrication supply chain partners, which will be made available to PrefabAUS members and the broader construction industry. \
+                The directory will be a valuable resource for connecting with other supply chain partners and identifying new business opportunities. \
+                    Please note that the directory will only be available to PrefabAUS members and will not be made publically available.'
+    fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(14) + 'px;" > ' + str(Q) + ' </p>'
+    st.markdown(fstring1, unsafe_allow_html=True)
+with col1:
+    q16 = st.checkbox('')
+
+st.write(''); st.write(''); st.write(''); st.write('')
 st.write(''); st.write(''); st.write(''); st.write('')
 st.write(''); st.write(''); st.write(''); st.write('')
 
+
 # Collate all inputs in a list
-survey_inputs = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q12, q13, q14, q15]
+survey_inputs = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q12, q13, q14, q15, q16]
 
 
 
@@ -387,13 +457,15 @@ with colm:
     # Submit response button
     if st.button("Submit Response", type = 'primary', use_container_width=True):
         # Insert the response into the database
-
-        c.execute('''
-            INSERT INTO survey_responses (q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15))
-        conn.commit()
-        st.success("Response submitted successfully. Thank you!")
+        if AllInputsFilled(survey_inputs):
+            c.execute('''
+                INSERT INTO survey_responses (q1, q2, q2_1, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (q1, q2, q2_1, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16))
+            conn.commit()
+            st.success("Response submitted successfully. Thank you!")
+        else:
+            st.error("Oh! You might have missed answering some questions. Please fill in missing details before submitting.")
 
 # Close the database connection
 conn.close()
