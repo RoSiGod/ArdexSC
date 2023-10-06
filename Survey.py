@@ -51,7 +51,8 @@ def AllInputsFilled(survey_inputs):
 
 
 # Create or connect to the SQLite database
-conn = sqlite3.connect('survey_responses_06OCT2023.db')
+database_name = 'survey_responses_06OCT2023.db'
+conn = sqlite3.connect(database_name)
 c = conn.cursor()
 
 # Create a table to store survey responses if it doesn't exist
@@ -478,7 +479,7 @@ with colm:
 conn.close()
 
 # Fetch number of responses in the database received so far
-conn = sqlite3.connect('survey_responses.db')
+conn = sqlite3.connect(database_name)
 c = conn.cursor()
 c.execute("SELECT COUNT(*) FROM survey_responses")
 num_responses = c.fetchone()[0]
