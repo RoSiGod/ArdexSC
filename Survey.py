@@ -51,7 +51,7 @@ def AllInputsFilled(survey_inputs):
 
 
 # Create or connect to the SQLite database
-conn = sqlite3.connect('survey_responses.db')
+conn = sqlite3.connect('survey_responses_06OCT2023.db')
 c = conn.cursor()
 
 # Create a table to store survey responses if it doesn't exist
