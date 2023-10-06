@@ -73,7 +73,8 @@ c.execute('''
         q12 TEXT,
         q13 TEXT,
         q14 TEXT,
-        q15 TEXT
+        q15 TEXT,
+        q16 TEXT
           
     )
 ''')
