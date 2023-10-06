@@ -171,13 +171,19 @@ with col1:
 with col2:
     q2_1 = st.text_input("", key= 'q2_1')
 
-
-    # check if input q2_1 is in the 'postcode' column
-    if int(q2_1) in df_postcodes['postcode'].values:
-        q2_1 = int(q2_1)
+    if q2_1 == '':
+        q2_1 = 3000
     else:
-        st.error('Please enter a valid postcode')
-        q2_1 = ''
+        if q2_1.isnumeric() == True:
+            # check if input q2_1 is in the 'postcode' column
+            if int(q2_1) in df_postcodes['postcode'].values:
+                q2_1 = int(q2_1)
+            else:
+                st.error('Please enter a valid postcode')
+                q2_1 = 3000
+        else:
+            st.error('Please enter a valid postcode')
+            q2_1 = 3000
 
 # read data from the csv file 'Aus_postcodes_cleaned.csv'
 df_postcodes = pd.read_csv('Aus_postcodes_cleaned.csv')  
