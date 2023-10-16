@@ -560,5 +560,4 @@ with col1:
     link_url = "https://www.prefabaus.org.au/"
     st.image('PrefabAUS_logo.png', use_column_width=True)
     
-with col2:
-    st.image('Unimelb_logo.png', use_column_width=True)
+
