@@ -54,7 +54,25 @@ def AllInputsFilled(survey_inputs):
 #====================================================================
 # DATABASE PARAMS
 #====================================================================
+# MongoDB connection details
+username = st.secrets["db_username"]
+password = st.secrets["db_password"]
+mongo_uri = "mongodb+srv://" + str(username) + ":" + str(password) + "@prefabaus.acdoov3.mongodb.net/?retryWrites=true&w=majority"
+database_name = "prefabaus"
+collection_name = "survey_responses"
 
+# Function to insert a survey response
+def insert_survey_response(response_data):
+    try:
+        client = MongoClient(mongo_uri)
+        db = client[database_name]
+        collection = db[collection_name]
+        collection.insert_one(response_data)
+        st.success("Response submitted successfully. Thank you!")
+    except Exception as e:
+        print("Error:", str(e))
+    finally:
+        client.close()
 
 
 #====================================================================
@@ -496,25 +514,10 @@ with colm:
     if st.button("Submit Response", type = 'primary', use_container_width=True):
         # Insert the response into the database
         if AllInputsFilled(survey_inputs):
-            # write all responses to a csv file
-              # CSV file path
-            csv_file_path = "survey_responses.csv"
-
-            # Load the existing CSV file into a DataFrame
-            try:
-                df = pd.read_csv(csv_file_path)
-            except FileNotFoundError:
-                # If the file doesn't exist, create a new DataFrame with 17 columns listed as q1 to q17
-                df = pd.DataFrame(columns=['q1', 'q1_1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8','q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15', 'q16','q17'])
-                
-
-            # Append the survey inputs as a new row
-            df = df.append(pd.Series(survey_inputs, index=df.columns), ignore_index=True)
-
-            # Save the DataFrame back to the CSV file
-            df.to_csv(csv_file_path, index=False)
-
-            st.success("Response submitted successfully. Thank you!")
+            survey_response = {"q1":q1, "q1_1":q1_1, "q2":q2, "q3":q3, "q4":q4, "q5":q5, "q6":q6, "q7":q7, "q8":q8, "q9":q9, "q10":q10, "q11":q11, "q12":q12, "q13":q13, "q14":q14, "q15":q15, "q16":q16, "q17":q17}
+            # Insert the survey response into MongoDB
+            insert_survey_response(survey_response)
+            
         else:
             st.error("Oh! You might have missed answering some questions. Please fill in missing details before submitting.")
 
