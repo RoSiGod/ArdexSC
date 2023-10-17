@@ -580,10 +580,16 @@ st.markdown(container_styles, unsafe_allow_html=True)
 # Create a container-like effect with grey background
 st.markdown('<div class="custom-container"> ' + Q + '</div>', unsafe_allow_html=True)
 
-col1, colmid, col2 = st.columns([1,5, 1])
+col1, col2 = st.columns([1,10])
 with col1:
     # Define the URL you want to link to
     link_url = "https://www.prefabaus.org.au/"
     st.image('PrefabAUS_logo.png', use_column_width=True)
     
-
+with col2:
+   # Apply custom CSS styles
+  st.markdown(container_styles, unsafe_allow_html=True)
+  
+  # Create a container-like effect with grey background
+  st.markdown('<div class="custom-container"> ' + Q + '</div>', unsafe_allow_html=True)
+ 
