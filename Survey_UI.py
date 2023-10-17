@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Sep  4 12:39:43 2023
+ THIS SCRIPT IS FOR THE SURVEY UI WRITTEN FOR PREFABAUS 2023 SUPPLY CHAIN SURVEY PROJECT.
+ THE CODE USES STREAMLIT APP DEVELOPMENT PLATFORM BASED OFF PYTHON TO CREATE AN INTERACTIVE DATA APPLICATION. 
+ THE DATABASE USED IS MONGODB WITH CREDENTIALS SAVED IN STREAMLIT SECRETE KEYS HIDDEN FROM THE USERS. 
 
 @author: Siddhesh
 """
@@ -9,6 +12,7 @@ import streamlit as st
 import pandas as pd
 import pandas as pd
 from pymongo import MongoClient
+import time
 
 # read data from the csv file 'Aus_postcodes_cleaned.csv'
 df_postcodes = pd.read_csv('Aus_postcodes_cleaned.csv')
@@ -48,15 +52,14 @@ def AllInputsFilled(survey_inputs):
             return False
     return True
           
-    
+def Streamlit_wait(): 
+    st.spinner(text="Please wait while we send your responses to a secure database...")   
 
 
 #====================================================================
 # DATABASE PARAMS
 #====================================================================
 # MongoDB connection details
-username = st.secrets["db_username"]
-password = st.secrets["db_password"]
 mongo_uri = "mongodb+srv://" + str(username) + ":" + str(password) + "@prefabaus.acdoov3.mongodb.net/?retryWrites=true&w=majority"
 database_name = "prefabaus"
 collection_name = "survey_responses"
@@ -68,7 +71,8 @@ def insert_survey_response(response_data):
         db = client[database_name]
         collection = db[collection_name]
         collection.insert_one(response_data)
-        st.success("Response submitted successfully. Thank you!")
+        
+        st.success("Response submitted successfully. Thank you! You may close this survey now. You will be notified of the future opportunities for collaboration.")
     except Exception as e:
         print("Error:", str(e))
     finally:
@@ -106,7 +110,7 @@ st.markdown(fstring1, unsafe_allow_html=True)
 Q = 'Your firsthand knowledge and experiences as a supply chain partner are crucial in helping us identify best practices, \
 areas for improvement, and future trends in prefabricated construction. Your input will not only aid in strengthening the industrys\
 capabilities but also inform policy decisions and educational initiatives. We value your expertise and invite you to share your perspectives and recommendations. \
-Together, we can shape a more resilient, efficient, and sustainable future for construction in Australia.Thank you for your participation in this important survey, which will undoubtedly play a pivotal \
+Together, we can shape a more resilient, efficient, and sustainable future for construction in Australia. We thank you for your participation in this important survey, which will undoubtedly play a pivotal \
 role in advancing the prefabrication sector in our country.'
 fstring1 = '<p style = "color:' + str(style.h4color) + '; font-size: ' + str(16) + 'px;text-align:justify;" > <b>' + str(Q) + '</b> </p>'
 st.markdown(fstring1, unsafe_allow_html=True)
@@ -166,7 +170,7 @@ with col1:
     fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
     st.markdown(fstring1, unsafe_allow_html=True)
 with col2:
-    q2 = st.slider('', 1920, 2023, 2020)
+    q2 = st.slider('', 1920, 2023)
 st.write('')
 
 
@@ -218,7 +222,10 @@ with col1:
     fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
     st.markdown(fstring1, unsafe_allow_html=True)
 with col2:
-    q4 = st.selectbox('', ("Processesed material producer/supplier", 'Wholesale distributor','Volumetric modular building/units/pods manufacturer', 'Panelised unit manufacturer', 'frame fabricator', 'warehouse and logistics facilitator', 'builder/construction company', 'design studio', 'engineering services'))
+    q4 = st.multiselect('', ("Processesed material producer/supplier", 'Wholesale distributor','Volumetric modular building/units/pods manufacturer', \
+                           'Panelised unit manufacturer', 'Frame fabricator', 'Warehouse and logistics facilitator', 'Builder/construction company', \
+                            'Design studio', 'Engineering services'))
+q4 = ', '.join(q4)
 st.write('')
 
 
@@ -229,7 +236,9 @@ with col1:
     fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
     st.markdown(fstring1, unsafe_allow_html=True)
 with col2:
-    q5 = st.selectbox(" ",('Engineer to order', 'make to order', 'assemble to order', 'make to stock'))
+    q5 = st.multiselect(" ",('ETO (Engineer to order): Custom design, unique products', 'MTO (Make to order): On demand production, some customisation',\
+                              'ATO (Assemble to order): Components assembled upon request', 'MTS (Make to stock): Pre-made inventory, no customisation'))
+q5 = ', '.join(q5)
 st.write('')
 
 
@@ -285,7 +294,7 @@ st.write('')
 col1, col2 = st.columns([c1,c2])
 with col1:
     st.write('')
-    Q = 'What is your approx annual revenue*'
+    Q = 'What is your approximate annual revenue*'
     fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
     st.markdown(fstring1, unsafe_allow_html=True)
 with col2:
@@ -297,7 +306,7 @@ st.write('')
 col1, col2 = st.columns([c1,c2])
 with col1:
     st.write('')
-    Q = 'What industry segment do you serve?*'
+    Q = 'What industry segments do you serve?*'
     fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
     st.markdown(fstring1, unsafe_allow_html=True)
 with col2:
@@ -318,6 +327,19 @@ q9 = ', '.join(q9)
 st.write('');st.write('');st.write('');st.write('')
 
 
+col1, col2 = st.columns([c1,c2])
+with col1:
+    Q = 'And what are your flagship products?*'
+    fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
+    st.markdown(fstring1, unsafe_allow_html=True)
+    st.markdown('<p style = "color:' + str(style.h3color) + '; font-size: ' + str(13) + 'px;" >'  + '(Write in (,) seperated format. Ex. precast concrete panales, precast beams, precast columns)'+  '</p>',unsafe_allow_html=True)
+
+with col2:
+    q9_a = st.text_input('', key='q9_a')
+    q9_a = ', '.join(q9_a)
+st.write('');st.write('');st.write('');st.write('')
+
+
 
 col1, col2 = st.columns([c1,c2])
 with col1:
@@ -329,8 +351,8 @@ with col2:
     q10 = st.multiselect("9.  (Ex., CodeMark, WaterMark, ISO, etc.)", ('CodeMark', 'WaterMark', 'Australian Made Certification','GECA (Good Environmental Choice Australia)', 
                                                                                                                                 'ISO 9001:2015 (Quality Management Systems)', 'ISO 14001:2015 (Environmental Management Systems)', 'ISO 45001:2018 (Occupational Health and Safety Management Systems)', 'Other'))
 # if other is chosen as one of the options in q9, then offer a text field to insert the other certification
-if 'Other' in q9:
-    q10_other = st.text_input('Enter the other certifications (comma (,) separated)', key='q9_other')
+if 'Other' in q10:
+    q10_other = st.text_input('Enter the other certifications (comma (,) separated)', key='q10_other')
     q10.append(q10_other)
 q10 = ', '.join(q10)
 st.write('');st.write('');st.write('');st.write('')
@@ -347,7 +369,7 @@ with col2:
     q11 = st.multiselect("10.  (if applicable)", ('Resilient floor coverings', 'Waterproofing membranes', 'Sanitaryware tiles', 'Epoxies','Levelling compounds','Timber','Light gauge steel',
                                                                                                        'Structural steel','XPS board','Concrete', 'FRP/GFRP composites', 'Other'))
 if 'Other' in q11:
-    q11_other = st.text_input('Enter the other materials (comma (,) separated', key='q10_other')
+    q11_other = st.text_input('Enter the other materials (comma (,) separated)', key='q11_other')
     q11.append(q11_other)
 q11 = ', '.join(q11)
 st.write('');st.write('');st.write('');st.write('')
@@ -366,7 +388,7 @@ with col2:
 
 
 # cout of q1, q2, q3, q4, q5, q6 have entries and measure the progress
-product_inputs = [q7, q8, q9, q10, q11, q12]
+product_inputs = [q7, q8, q9, q9_a, q10, q11, q12]
 # Count how many inputs are filled
 count = 0
 for i, value in enumerate(product_inputs):
@@ -416,19 +438,19 @@ col1, col2 = st.columns([c1,c2])
 with col1:
     st.write('Enter quantity')
 with col2:
-    q13_1 = st.number_input('',key='q12-qty')
+    q13_1 = st.number_input('',key='q13-qty')
 
 col1, col2 = st.columns([c1,c2])
 with col1:
     st.write('Enter units')
 with col2:
-    q13_2 = st.text_input('',key='q12-unt')
+    q13_2 = st.text_input('',key='q13-unt')
 
 col1, col2 = st.columns([c1,c2])
 with col1:
     st.write('Enter period')
 with col2:
-    q13_3 = st.text_input('',key='q12-time')
+    q13_3 = st.text_input('',key='q13-time')
 
 q13 = str(q13_1) + ' ' + str(q13_2) + ' per ' + str(q13_3)
 st.write('you have entered:',q13)
@@ -446,7 +468,7 @@ with col1:
 with col2:
     q14 = st.multiselect('', ('Statutary warranty','Manufacturer warranty','Design life warranty','Implied warranties (Ex. Australian Consumer Law)','Product specific warranties','Other'))
 if 'Other' in q14:
-    q14_other = st.text_input('Enter the other types of warranties', key='q13_other')
+    q14_other = st.text_input('Enter the other types of warranties (,) separated', key='q14_other')
     q14.append(q14_other)
 q14 = ', '.join(q14)
 st.write(''); st.write(''); st.write(''); st.write('')
@@ -462,7 +484,7 @@ with col1:
 with col2:
     q15 = st.multiselect('', ('Reduced environmental impact','Locally sourced materials','Compliance with sustainable and ecofriendly practices','Gender inclusive workforce','Higher robotic automation','Other'))
 if 'Other' in q15:
-    q15_other = st.text_input('Enter the other value offerings', key='q14_other')
+    q15_other = st.text_input('Enter the other value offerings (,) separated', key='q15_other')
     q15.append(q15_other)
 q15 = ', '.join(q15)
 st.write(''); st.write(''); st.write(''); st.write('')
@@ -497,7 +519,7 @@ st.write(''); st.write(''); st.write(''); st.write('')
 
 
 # Collate all inputs in a list
-survey_inputs = [q1, q1_1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17]
+survey_inputs = [q1, q1_1, q2, q3, q4, q5, q6, q7, q8, q9, q9_a, q10, q11, q12, q13_1, q13_2, q13_3, q14, q15, q16, q17]
 
 
 
@@ -511,20 +533,22 @@ with col1:
 
 with colm:
     # Submit response button
-    if st.button("Submit Response", type = 'primary', use_container_width=True):
+    button = st.button("Submit Response", type = 'primary', use_container_width=True)
+    if button:
         # Insert the response into the database
         if AllInputsFilled(survey_inputs):
-            survey_response = {"q1":q1, "q1_1":q1_1, "q2":q2, "q3":q3, "q4":q4, "q5":q5, "q6":q6, "q7":q7, "q8":q8, "q9":q9, "q10":q10, "q11":q11, "q12":q12, "q13":q13, "q14":q14, "q15":q15, "q16":q16, "q17":q17}
+            with st.spinner(text="Please wait 10 seconds while we send your responses to a secure database..."):
+                time.sleep(4)
+            survey_response = {"q1":q1, "q1_1":q1_1, "q2":q2, "q3":q3, "q4":q4, "q5":q5, "q6":q6, "q7":q7, "q8":q8, "q9":q9, "q9_a":q9_a, "q10":q10, "q11":q11, "q12":q12, "q13_1":q13_1,"q13_2":q13_2,"q13_3":q13_3, "q14":q14, "q15":q15, "q16":q16, "q17":q17}
             # Insert the survey response into MongoDB
             insert_survey_response(survey_response)
-            
         else:
             st.error("Oh! You might have missed answering some questions. Please fill in missing details before submitting.")
 
-
+         
 
 # cout of q1, q2, q3, q4, q5, q6 have entries and measure the progress
-supply_inputs = [q12, q13, q14, q15, q16]
+supply_inputs = [q12, q13_1, q13_2, q13_3, q14, q15, q16]
 # Count how many inputs are filled
 count = 0
 for i, value in enumerate(supply_inputs):
