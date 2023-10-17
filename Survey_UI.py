@@ -574,12 +574,6 @@ st.write('');st.write('');st.write('');st.write('');st.write('');st.write('');st
 Q = '2023 Australian prefabrication supply chain survey By PrefabAUS'
 
 
-# Apply custom CSS styles
-st.markdown(container_styles, unsafe_allow_html=True)
-
-# Create a container-like effect with grey background
-st.markdown('<div class="custom-container"> ' + Q + '</div>', unsafe_allow_html=True)
-
 col1, col2 = st.columns([1,10])
 with col1:
     # Define the URL you want to link to
