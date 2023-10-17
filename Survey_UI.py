@@ -569,8 +569,7 @@ st.sidebar.progress(count/len(supply_inputs))
 # Footer PAGE CONTENT
 #====================================================================
 st.write('');st.write('');st.write('');st.write('');st.write('');st.write('');st.write('');st.write('')
-st.write('');st.write('');st.write('');st.write('');st.write('');st.write('');st.write('');st.write('')
-st.write('');st.write('');st.write('');st.write('');st.write('');st.write('');st.write('');st.write('')
+
 Q = '2023 Australian prefabrication supply chain survey By PrefabAUS'
 
 
