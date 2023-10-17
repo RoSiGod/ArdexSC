@@ -60,6 +60,8 @@ def Streamlit_wait():
 # DATABASE PARAMS
 #====================================================================
 # MongoDB connection details
+username = st.secrets["db_username"]
+password = st.secrets["db_password"] 
 mongo_uri = "mongodb+srv://" + str(username) + ":" + str(password) + "@prefabaus.acdoov3.mongodb.net/?retryWrites=true&w=majority"
 database_name = "prefabaus"
 collection_name = "survey_responses"
