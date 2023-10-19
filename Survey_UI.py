@@ -128,8 +128,6 @@ st.write('')
 st.write('')
 st.write('')
 
-st.markdown(":point_down: Start your survey here :point_down:")
-
 st.image('divider.png', use_column_width=True)
 st.header('Company information')
 st.write('')
