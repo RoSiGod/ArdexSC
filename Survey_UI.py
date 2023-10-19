@@ -121,7 +121,7 @@ st.markdown(fstring1, unsafe_allow_html=True)
 # END OF HEADER PAGE CONTENT
 #====================================================================
 
-st.video('https://www.youtube.com/watch?v=akKgTf3cb-4')
+st.video('DC_intro.mp4')
 
 st.write('')
 st.write('')
