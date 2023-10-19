@@ -102,18 +102,18 @@ st.write('')
 st.write('')
 
 
-Q = 'PrefabAUS is collaborating on a comprehensive survey aimed at gaining valuable insights into the prefabricated construction supply chain within Australia. \
-This research initiative seeks to better understand the dynamics, challenges, and opportunities that shape the prefabrication sector.\
-By participating in this survey, you are contributing to a collective effort to enhance the efficiency, sustainability, \
-and innovation within the construction industry. '
+Q = "PrefabAUS is collaborating on a comprehensive survey to gain valuable insights into Australia's prefabricated construction supply chain. \
+This research initiative seeks to better understand the dynamics, challenges, and opportunities that shape the prefabrication sector. \
+By participating in this survey, you are contributing to a collective effort to enhance efficiency, sustainability, and innovation within the construction industry."
+
 fstring1 = '<p style = "color:' + str(style.h4color) + '; font-size: ' + str(16) + 'px;text-align:justify;" > <b>' + str(Q) + '</b> </p>'
 st.markdown(fstring1, unsafe_allow_html=True)
 
-Q = 'Your firsthand knowledge and experiences as a supply chain partner are crucial in helping us identify best practices, \
-areas for improvement, and future trends in prefabricated construction. Your input will not only aid in strengthening the industrys\
-capabilities but also inform policy decisions and educational initiatives. We value your expertise and invite you to share your perspectives and recommendations. \
-Together, we can shape a more resilient, efficient, and sustainable future for construction in Australia. We thank you for your participation in this important survey, which will undoubtedly play a pivotal \
-role in advancing the prefabrication sector in our country.'
+Q = "Your firsthand knowledge and experiences as a supply chain partner are crucial in helping us identify best practices, areas for improvement, \
+and future trends in prefabricated construction. Your input will not only aid in strengthening the industry's capabilities but also inform policy \
+decisions and educational initiatives. We value your expertise and invite you to share your perspectives and recommendations. Together, we can shape a more resilient, \
+efficient, and sustainable future for construction in Australia. We thank you for participating in this important survey, which will undoubtedly play a pivotal role in advancing the prefabrication sector in our country."
+
 fstring1 = '<p style = "color:' + str(style.h4color) + '; font-size: ' + str(16) + 'px;text-align:justify;" > <b>' + str(Q) + '</b> </p>'
 st.markdown(fstring1, unsafe_allow_html=True)
 
@@ -220,11 +220,11 @@ st.write('')
 col1, col2 = st.columns([c1,c2])
 with col1:
     st.write('')
-    Q = 'What best descibes your business from the options below?*'
+    Q = 'What best describes your business from the options below?*'
     fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
     st.markdown(fstring1, unsafe_allow_html=True)
 with col2:
-    q4 = st.multiselect('', ("Processesed material producer/supplier", 'Wholesale distributor','Volumetric modular building/units/pods manufacturer', \
+    q4 = st.multiselect('', ("Processed material producer/supplier", 'Wholesale distributor','Volumetric modular building/units/pods manufacturer', \
                            'Panelised unit manufacturer', 'Frame fabricator', 'Warehouse and logistics facilitator', 'Builder/construction company', \
                             'Design studio', 'Engineering services'))
 q4 = ', '.join(q4)
@@ -323,7 +323,7 @@ st.markdown(fstring1, unsafe_allow_html=True)
 
 st.image('product_category.png', use_column_width=True)
 
-q9 = st.multiselect('', ('Cat-1: Volumetric modules with internal fitouts', 'Cat-2: 3D Volumetric module skeletons', 'Cat-3: 2D panelised systems with multiplie subsystems',
+q9 = st.multiselect('', ('Cat-1: Volumetric modules with internal fitouts', 'Cat-2: 3D Volumetric module skeletons', 'Cat-3: 2D panelised systems with multiple subsystems',
                                                                                    'Cat-4: 2D panels without sub-systems', 'Cat-5: Linear elements precut to sizes', 'Cat-6: Processed building materials and equipment'))
 q9 = ', '.join(q9)
 st.write('');st.write('');st.write('');st.write('')
@@ -334,7 +334,7 @@ with col1:
     Q = 'And what are your flagship products?*'
     fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
     st.markdown(fstring1, unsafe_allow_html=True)
-    st.markdown('<p style = "color:' + str(style.h3color) + '; font-size: ' + str(13) + 'px;" >'  + '(Write in (,) seperated format. Ex. precast concrete panales, precast beams, precast columns)'+  '</p>',unsafe_allow_html=True)
+    st.markdown('<p style = "color:' + str(style.h3color) + '; font-size: ' + str(13) + 'px;" >'  + '(Write in (,) separated format. Ex. precast concrete panels, CLT beams, LGS frames)'+  '</p>',unsafe_allow_html=True)
 
 with col2:
     q9_a = st.text_input('', key='q9_a')
@@ -428,7 +428,7 @@ Ex = 'Example: 1000 m3 per day, 1000 kgs per week, 1000 m2 per month, 1000 units
 fstring1 = '<p style = "color:' + str(style.h4color) + '; font-size: ' + str(style.h4size) + 'px;" > <b>' + str(Ex) + '</b> </p>'
 st.markdown(fstring1, unsafe_allow_html=True)
 
-Ex = 'Enter combined capacity of all your facilities and SKUs. If SKUs are of different nature, choose your main SKU.'
+Ex = 'Enter the combined capacity of all your facilities and SKUs. If SKUs are of different nature, choose your main SKU.'
 fstring2 = '<p style = "color:' + str(style.h4color) + '; font-size: ' + str(style.h4size) + 'px;" > <b>' + str(Ex) + '</b> </p>'
 st.markdown(fstring2, unsafe_allow_html=True)
 
@@ -468,7 +468,7 @@ with col1:
     fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
     st.markdown(fstring1, unsafe_allow_html=True)
 with col2:
-    q14 = st.multiselect('', ('Statutary warranty','Manufacturer warranty','Design life warranty','Implied warranties (Ex. Australian Consumer Law)','Product specific warranties','Other'))
+    q14 = st.multiselect('', ('Statutory warranty','Manufacturer warranty','Design life warranty','Implied warranties (Ex. Australian Consumer Law)','Product specific warranties','Other'))
 if 'Other' in q14:
     q14_other = st.text_input('Enter the other types of warranties (,) separated', key='q14_other')
     q14.append(q14_other)
@@ -495,7 +495,7 @@ st.write(''); st.write(''); st.write(''); st.write('')
 
 
 
-Q = 'What are the top challenges in your prefab business that PrefabAUS can advocate for on your behalf?*'
+Q = 'What are the top challenges in your business that PrefabAUS can advocate for on your behalf?*'
 fstring1 = '<p style = "color:' + str(style.h3color) + '; font-size: ' + str(style.h3size) + 'px;" > <b>' + str(Q) + '</b> </p>'
 st.markdown(fstring1, unsafe_allow_html=True)
 q16 = st.text_area('')
